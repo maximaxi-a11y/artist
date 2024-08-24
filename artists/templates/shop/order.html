@@ -1,0 +1,41 @@
+{%extends 'base.html'%} {%load static%}
+<!DOCTYPE html>
+<html lang="en">
+
+
+{%block links%}
+<title>Menu UMI</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+<link href="{%static '\main\Css\order.css'%}" rel="stylesheet"> {%endblock%}
+
+
+<body background="{%static '\IMG\menu.png'%}">
+    {%block content%}
+    <section class="menu-section">
+        <h1>MENU UMI</h1>
+        {% if products %}
+        <div class="menu-grid">
+            {% for product in products %}
+            <div class="menu-item">
+                <h2>{{product.name}}</h2>
+                <p>{{product.description}}</p>
+                <form action="{% url 'cart_add' product.id %}" method="post">
+                    {% csrf_token %}{{ cart_add_product_form.update }}
+                    <input type="hidden" name="quantity" value="1">
+                    <input value="1" type="image" src="{% static '\IMG\add-to-cart.jpg' %}" alt="Добавить в корзину" class="add-to-cart-image">
+                </form>
+            </div>
+            {%endfor%}
+        </div>
+        {%else%}
+        <div class="no-menu">
+            <h2>К сожалению на данный момент у нас нет позиций</h2>
+            <p>Попробуйте сделать заказ позже</p>
+        </div>
+        {%endif%} {%endblock%}
+
+    </section>
+
+</body>
+
+</html>

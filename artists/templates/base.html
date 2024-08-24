@@ -1,0 +1,50 @@
+{%load static%}
+
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{%static 'main\Css\base.css'%}"> {%block links%}{%endblock%}
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="menu" id="menu">
+                <div class="logo">
+                    <a href="">umi.corp</a>
+                </div>
+                <a href="">Главная</a>
+                <a href="">Меню</a>
+                <a href="">Корзина</a>
+                <a href="">Личный кабинет</a>
+            </div>
+            <div class="burger" id="burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+    {%block content%}{%endblock%}
+
+
+</body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const burger = document.getElementById('burger');
+        const menu = document.getElementById('menu');
+
+        if (burger && menu) {
+            burger.addEventListener('click', function() {
+                burger.classList.toggle('active');
+                menu.classList.toggle('active');
+            });
+        }
+    });
+</script>
+
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+{%extends 'base.html'%} {%block links%}
+<title>Login</title>
+<!-- Include Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+    .login-container {
+        max-width: 400px;
+        margin: 50px auto;
+        padding: 30px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px 0px #0000001a;
+        margin-top: 150px;
+        /* Add this line for a top margin */
+    }
+    
+    .login-title {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    
+    .btn-primary {
+        background-color: #4C613F;
+        border-color: #4C613F;
+        border-radius: 20px;
+    }
+    
+    .btn-primary:hover {
+        background-color: #658353;
+        border-color: #658353;
+    }
+    
+    .form-control {
+        border-radius: 5px;
+    }
+</style>
+{%endblock%}
+
+<body>
+    {%block content%}
+    <div class="login-container">
+        <h2 class="login-title">Войти в аккаунт</h2>
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="form-group mb-3">
+                <label for="id_username" class="form-label">Username</label>
+                <input type="text" name="username" autofocus required id="id_username" class="form-control" placeholder="Enter your username">
+            </div>
+            <div class="form-group mb-3">
+                <label for="id_password" class="form-label">Password</label>
+                <input type="password" name="password" required id="id_password" class="form-control" placeholder="Enter your password">
+            </div>
+            {% if form.non_field_errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ form.non_field_errors }}
+            </div>
+            {% endif %}
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
+            </div>
+            <p class="text-center mt-3">
+                <a href="{% url 'register' %}">Зарегистрироваться</a>
+            </p>
+        </form>
+    </div>
+    {%endblock%}
+</body>
+
+</html>

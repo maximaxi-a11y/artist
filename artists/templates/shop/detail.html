@@ -1,0 +1,146 @@
+{%extends 'base.html'%} {%load static%}
+
+<!DOCTYPE html>
+<html lang="ru">
+
+
+{%block links%}
+<title>Корзина</title>
+<link rel="stylesheet" href="{% static '\shop\cart\cart.css' %}"> {%endblock%}
+
+
+<body>
+    {%block content%}
+    <div style="height: 100px;"></div>
+    <div class="cart-container">
+        <div class="cart">
+            <h2>Моя корзина</h2>
+            {% if cart %} {% for item in cart %}
+            <div class="cart-item">
+                <img src="{{ item.image }}" alt="{{ product.name }}" class="main-image" id="mainImage">
+                <div class="item-details">
+                    <p>{{ item.product.name }}</p>
+                    <p>₽{{ item.product.price }}</p>
+                </div>
+                <div class="item-quantity">
+                    <form action="{% url 'cart_add' item.product.id %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="quantity" value="{{ item.quantity|add:-1 }}">
+                        <input type="hidden" name="update" value="True"> {% if item.quantity >= 0 %}
+                        <form action="{% url 'cart_add' item.product.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantity" value="{{ item.quantity|add:-1 }}">
+                            <input type="hidden" name="update" value="True"> {% if item.quantity >= 0 %}<button type="submit">-</button>{%else%}
+                            <button type="submit" disabled="True">-</button> {% endif %}
+                        </form>
+                        {% endif %}
+                        <p>{{item.quantity}}</p>
+                        <form action="{% url 'cart_add' item.product.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantity" value="{{ item.quantity|add:1 }}">
+                            <input type="hidden" name="update" value="True">
+                            <button type="submit">+</button>
+                        </form>
+                    </form>
+
+
+
+
+
+                </div>
+                <p class="item-price">₽{{ item.product.price }}</p>
+                <button class="delete-button"><a href="{% url 'cart_remove' item.product.id %}">🗑️</a></button>
+            </div>
+            {% endfor %} {%else%}
+            <p>Ваша корзина пуста</p>
+            {%endif%}
+            <!-- <div class="promo-wishlist">
+                <p>Добавить промокод</p>
+                <p>Добавить пожелание</p>
+            </div> -->
+        </div>
+        <div class="order-summary">
+            <h2>Детали заказа</h2>
+            <div class="summary-item">
+                <p>Сумма</p>
+                <p>₽ {{total_price}}</p>
+            </div>
+            <div class="summary-item">
+                <p>Доставка</p>
+                <p>БЕСПЛАТНО</p>
+            </div>
+            <p class="delivery-address">Московская область,<br>Россия</p>
+            <div class="summary-total">
+                <p>Итого</p>
+                <p>₽ {{total_price}}</p>
+            </div>
+            <button class="checkout-button" class="contact-btn" onclick="openPopup()">Оформить заказ</button>
+            <!-- <p class="secure-order">🔒 Безопасный заказ</p> -->
+
+            <div class="popup-container" id="popup">
+                <div class="popup-content">
+                    <h2>Contact Information</h2>
+                    <p>Email: contact@example.com</p>
+                    <p>Phone: +1 234 567 890</p>
+                    <p>Address: 123 Main Street, City, Country</p>
+                    <button class="close-btn" onclick="closePopup()" type="submit" class="btn btn-primary" style="background-color: #4C613F; border-radius: 20px; border: none; color: aliceblue;">закрыть</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        function openPopup() {
+            // Create the popup container
+            const popupContainer = document.createElement('div');
+            popupContainer.className = 'popup-container';
+
+            // Create the popup content
+            const popupContent = document.createElement('div');
+            popupContent.className = 'popup-content';
+
+            // Add content to the popup
+            popupContent.innerHTML = `
+            <h2>Contact Information</h2>
+            <p>Email: contact@example.com</p>
+            <p>Phone: +1 234 567 890</p>
+            <p>Address: 123 Main Street, City, Country</p>
+            <button class="close-btn" onclick="closePopup()" type="submit" class="btn btn-primary" style="background-color: #4C613F; border-radius: 20px; border: none; color: aliceblue;">закрыть</button>
+
+        `;
+
+            // Append the popup content to the container
+            popupContainer.appendChild(popupContent);
+
+            // Append the container to the body
+            document.body.appendChild(popupContainer);
+        }
+
+        // Function to close the popup
+        function closePopup() {
+            // Find the popup container and remove it from the DOM
+            const popupContainer = document.querySelector('.popup-container');
+            if (popupContainer) {
+                popupContainer.remove();
+            }
+        }
+    </script>
+    {%endblock%}
+</body>
+
+</html>
+
+
+<!-- {% if cart %}
+<ul>
+    {% for item in cart %}
+    <li>
+        {{ item.product.name }} - {{ item.quantity }} x {{ item.product.price }} = {{ item.total_price }}
+        <a href="{% url 'cart_remove' item.product.id %}">Удалить</a>
+    </li>
+    {% endfor %}
+</ul>
+<p>Общая стоимость: {{ cart.get_total_price }}</p>
+<a href="#">Оформить заказ</a> {% else %}
+<p>Ваша корзина пуста.</p>
+{% endif %} -->
